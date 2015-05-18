@@ -28,7 +28,7 @@ public class CandidateInviteFactory {
 
     static public ExtendedCandidateInviteDTO randomInvite() {
         UUID random = UUID.randomUUID();
-        String randomString = random.toString();
+        String randomString = random.toString().replaceAll("-", "");
 
         ExtendedCandidateInviteDTO inviteDTO = new ExtendedCandidateInviteDTO();
         inviteDTO.setId(random);
@@ -39,7 +39,7 @@ public class CandidateInviteFactory {
         inviteDTO.setSurname("Testisov");
         inviteDTO.setpONumber("1113");
         inviteDTO.setExternalPackageReference("package1");
-        inviteDTO.setExternalReferenceId("someUniqueId");
+        inviteDTO.setExternalReferenceId(randomString);
         inviteDTO.setDivisionName("HBMFromTests");
         inviteDTO.setNotSubmittedDays(10);
         inviteDTO.setReturnToClient(false);
