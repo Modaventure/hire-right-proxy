@@ -57,7 +57,7 @@ public class HireRightServiceTest {
         assertThat(statusNotificationDTO.ExternalPackageReference, is(inviteDTO.getExternalPackageReference()));
         assertThat(statusNotificationDTO.IsComplete, is(false));
 
-        assertThat(statusNotificationDTO.DivisionName, is(not(isEmptyOrNullString())));
+        assertThat(statusNotificationDTO.DivisionName, is(inviteDTO.getDivisionName()));
         assertThat(statusNotificationDTO.ServiceLevelName, is(not(isEmptyOrNullString())));
         assertThat(statusNotificationDTO.OrderStatus, is(not(isEmptyOrNullString())));
 
