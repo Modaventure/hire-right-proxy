@@ -51,19 +51,22 @@ public class HireRightServiceTest {
     }
 
     @Test
-    public void testGetInvestigationStatus() throws Exception {
+    public void testGetNewInvestigationStatus() throws Exception {
         StatusNotificationDTO statusNotificationDTO = service.getInvestigationStatus(passportReference, investigationReference);
 
         assertThat(statusNotificationDTO.ExternalPackageReference, is(inviteDTO.getExternalPackageReference()));
         assertThat(statusNotificationDTO.IsComplete, is(false));
 
+        // it will return null for unknown devision names (HiredByMe is known)
         assertThat(statusNotificationDTO.DivisionName, is(inviteDTO.getDivisionName()));
         assertThat(statusNotificationDTO.ServiceLevelName, is(not(isEmptyOrNullString())));
         assertThat(statusNotificationDTO.OrderStatus, is(not(isEmptyOrNullString())));
 
         assertThat(statusNotificationDTO.DateCreated, is(notNullValue()));
         assertThat(statusNotificationDTO.ScreeningStartDate, is(notNullValue()));
-        assertThat(statusNotificationDTO.DateDelivered, is(notNullValue()));
+
+        // not null only for completed investigations
+        assertThat(statusNotificationDTO.DateDelivered, is(nullValue()));
 
         assertThat(statusNotificationDTO.PercentageComplete, is(greaterThanOrEqualTo(0)));
         assertThat(statusNotificationDTO.TaskCount, is(greaterThanOrEqualTo(0)));

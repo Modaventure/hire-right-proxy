@@ -40,7 +40,7 @@ public class CandidateInviteFactory {
         inviteDTO.setpONumber("1113");
         inviteDTO.setExternalPackageReference("package1");
         inviteDTO.setExternalReferenceId(randomString);
-        inviteDTO.setDivisionName("HBMFromTests");
+        inviteDTO.setDivisionName("HiredByMe");
         inviteDTO.setNotSubmittedDays(10);
         inviteDTO.setReturnToClient(false);
         inviteDTO.setRestrictedClientAccess(false);
