@@ -1,50 +1,52 @@
 package com.mv.hr;
 
-import com.mv.hr.dto.CandidateInviteDTO;
-
 import java.util.UUID;
 
+import com.mv.hr.dto.CandidateInviteDTO;
+
 public class CandidateInviteFactory {
-    static public class ExtendedCandidateInviteDTO extends CandidateInviteDTO {
-        private transient UUID id;
-        private transient String passportReference;
+	static public class ExtendedCandidateInviteDTO extends CandidateInviteDTO {
+		private static final long serialVersionUID = 1L;
 
-        public UUID getId() {
-            return id;
-        }
+		private transient UUID id;
+		private transient String passportReference;
 
-        public void setId(UUID id) {
-            this.id = id;
-        }
+		public UUID getId() {
+			return id;
+		}
 
-        public String getPassportReference() {
-            return passportReference;
-        }
+		public void setId(UUID id) {
+			this.id = id;
+		}
 
-        public void setPassportReference(String passportReference) {
-            this.passportReference = passportReference;
-        }
-    }
+		public String getPassportReference() {
+			return passportReference;
+		}
 
-    static public ExtendedCandidateInviteDTO randomInvite() {
-        UUID random = UUID.randomUUID();
-        String randomString = random.toString().replaceAll("-", "");
+		public void setPassportReference(String passportReference) {
+			this.passportReference = passportReference;
+		}
+	}
 
-        ExtendedCandidateInviteDTO inviteDTO = new ExtendedCandidateInviteDTO();
-        inviteDTO.setId(random);
-        inviteDTO.setPassportReference(randomString);
+	static public ExtendedCandidateInviteDTO randomInvite() {
+		UUID random = UUID.randomUUID();
+		String randomString = random.toString().replaceAll("-", "");
 
-        inviteDTO.setEmail("testy.testisov@test.com");
-        inviteDTO.setForename("Testy");
-        inviteDTO.setSurname("Testisov");
-        inviteDTO.setpONumber("1113");
-        inviteDTO.setExternalPackageReference("package1");
-        inviteDTO.setExternalReferenceId(randomString);
-        inviteDTO.setDivisionName("HiredByMe");
-        inviteDTO.setNotSubmittedDays(10);
-        inviteDTO.setReturnToClient(false);
-        inviteDTO.setRestrictedClientAccess(false);
+		ExtendedCandidateInviteDTO inviteDTO = new ExtendedCandidateInviteDTO();
+		inviteDTO.setId(random);
+		inviteDTO.setPassportReference(randomString);
 
-        return inviteDTO;
-    }
+		inviteDTO.setEmail("testy.testisov@test.com");
+		inviteDTO.setForename("Testy");
+		inviteDTO.setSurname("Testisov");
+		inviteDTO.setpONumber("1113");
+		inviteDTO.setExternalPackageReference("package1");
+		inviteDTO.setExternalReferenceId(randomString);
+		inviteDTO.setDivisionName("HiredByMe");
+		inviteDTO.setNotSubmittedDays(10);
+		inviteDTO.setReturnToClient(false);
+		inviteDTO.setRestrictedClientAccess(false);
+
+		return inviteDTO;
+	}
 }

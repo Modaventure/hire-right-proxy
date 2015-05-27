@@ -5,13 +5,12 @@ import java.util.Map;
 
 import javax.ws.rs.core.Response;
 
-import com.mv.base.JsonDataInformation;
+import com.mv.base.RawDataInformation;
 import com.mv.base.RequestRestartable;
-import com.mv.base.util.JSONUtil;
 
-public class ThirdPartyBadResponseException extends Exception implements JsonDataInformation, RequestRestartable {
+public class ThirdPartyBadResponseException extends Exception implements RawDataInformation, RequestRestartable {
 	private static final long serialVersionUID = 1L;
-	
+
 	private Response response;
 
 	public ThirdPartyBadResponseException(String message, Response response) {
@@ -29,7 +28,7 @@ public class ThirdPartyBadResponseException extends Exception implements JsonDat
 	}
 
 	@Override
-	public String getRawJsonData() {
+	public Map<String, Object> getRawData() {
 		Map<String, Object> rawResponse = new HashMap<String, Object>();
 
 		rawResponse.put("headers", response.getHeaders());
@@ -44,7 +43,7 @@ public class ThirdPartyBadResponseException extends Exception implements JsonDat
 
 		rawResponse.put("body", body);
 
-		return JSONUtil.toJson(rawResponse);
+		return rawResponse;
 	}
 
 	@Override
