@@ -5,4 +5,5 @@ public interface HireRightConfiguration {
 	String getHireRightApiProfile();
 	String getHireRightApiUsername();
 	String getHireRightApiPassword();
+	int getHireRightApiReadTimeout();
 }
