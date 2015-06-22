@@ -24,6 +24,8 @@ import com.mv.base.exception.MissingConfigurationException;
 import com.mv.base.exception.ThirdPartyBadResponseException;
 import com.mv.base.exception.ThirdPartyConnectivityFailureException;
 import com.mv.hr.config.HireRightConfiguration;
+import com.mv.hr.dto.AdditionalServiceRequestDTO;
+import com.mv.hr.dto.AdditionalServiceResponseDTO;
 import com.mv.hr.dto.CandidateInviteDTO;
 import com.mv.hr.dto.CandidateInviteResponseDTO;
 import com.mv.hr.dto.CandidateReportDTO;
@@ -41,6 +43,7 @@ public class HireRightService {
 	private UriBuilder builderUrlGetCandidateReport;
 	private UriBuilder builderUrlGetDocumentList;
 	private UriBuilder builderUrlGetDocument;
+	private UriBuilder builderUrlAddAdditionalService;
 	private Client webClient;
 
 	public HireRightService(HireRightConfiguration configuration) {
@@ -60,6 +63,7 @@ public class HireRightService {
 		builderUrlGetCandidateReport = getUriBuilder("GetCandidateReport/{profileId}/{passportReference}/{investigationReference}");
 		builderUrlGetDocumentList = getUriBuilder("GetDocumentList/{profileId}/{passportReference}/{investigationReference}");
 		builderUrlGetDocument = getUriBuilder("GetDocument/{profileId}/{passportReference}/{investigationReference}/{documentReference}");
+		builderUrlAddAdditionalService = getUriBuilder("AddAdditionalService/{profileId}/{passportReference}/{investigationReference}");
 
 		HttpAuthenticationFeature auth = HttpAuthenticationFeature.basicBuilder()
 				.credentials(hireRightUsername, hireRightPassword)
@@ -109,6 +113,12 @@ public class HireRightService {
 		ResponseWrapper responseWrapper = get(builderUrlGetDocument, passportReference, investigationReference, documentReference);
 		DocumentDTO documentDTO = parseResponse(responseWrapper, DocumentDTO.class);
 		return documentDTO;
+	}
+
+	public AdditionalServiceResponseDTO addAdditionalService(AdditionalServiceRequestDTO request, String passportReference, String investigationReference) throws ThirdPartyConnectivityFailureException, ThirdPartyBadResponseException {
+		ResponseWrapper responseWrapper = post(request, builderUrlAddAdditionalService, passportReference, investigationReference);
+		AdditionalServiceResponseDTO response = parseResponse(responseWrapper, AdditionalServiceResponseDTO.class);
+		return response;
 	}
 
 
