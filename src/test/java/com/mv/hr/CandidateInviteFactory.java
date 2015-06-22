@@ -36,16 +36,16 @@ public class CandidateInviteFactory {
 		inviteDTO.setId(random);
 		inviteDTO.setPassportReference(randomString);
 
-		inviteDTO.setEmail("testy.testisov@test.com");
-		inviteDTO.setForename("Testy");
-		inviteDTO.setSurname("Testisov");
-		inviteDTO.setpONumber("1113");
-		inviteDTO.setExternalPackageReference("package1");
-		inviteDTO.setExternalReferenceId(randomString);
-		inviteDTO.setDivisionName("HiredByMe");
-		inviteDTO.setNotSubmittedDays(10);
-		inviteDTO.setReturnToClient(false);
-		inviteDTO.setRestrictedClientAccess(false);
+		inviteDTO.Email = "testy.testisov@test.com";
+		inviteDTO.Forename = "Testy";
+		inviteDTO.Surname = "Testisov";
+		inviteDTO.PONumber = "1113";
+		inviteDTO.ExternalPackageReference = "package1";
+		inviteDTO.ExternalReferenceId = randomString;
+		inviteDTO.DivisionName = "HiredByMe";
+		inviteDTO.NotSubmittedDays = 10;
+		inviteDTO.ReturnToClient = false;
+		inviteDTO.RestrictedClientAccess = false;
 
 		return inviteDTO;
 	}
