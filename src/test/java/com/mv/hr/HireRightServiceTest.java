@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;
 import static org.junit.Assert.assertThat;
@@ -13,8 +14,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.mv.hr.dto.AdditionalServiceRequestDTO;
+import com.mv.hr.dto.AdditionalServiceResponseDTO;
 import com.mv.hr.dto.CandidateInviteResponseDTO;
 import com.mv.hr.dto.CandidateReportDTO;
+import com.mv.hr.dto.DocumentListDTO;
 import com.mv.hr.dto.StatusNotificationDTO;
 
 public class HireRightServiceTest {
@@ -91,5 +95,26 @@ public class HireRightServiceTest {
 		assertThat(candidateReport.FileType, is(not(isEmptyOrNullString())));
 		assertThat(candidateReport.ContentEncodingMethod, is(not(isEmptyOrNullString())));
 		assertThat(candidateReport.Content, is(not(isEmptyOrNullString())));
+	}
+
+	@Test
+	public void testGetDocumentList() throws Exception {
+		DocumentListDTO documentList = service.getDocumentList(passportReference, investigationReference);
+		assertThat(documentList.Documents, is(empty()));
+	}
+
+	@Test
+	public void testAddAdditionalService() throws Exception {
+		AdditionalServiceRequestDTO request = new AdditionalServiceRequestDTO();
+		request.ScreeningServiceName = "CIFAS";
+		request.HasExtendedData = false;
+
+		AdditionalServiceResponseDTO response = service.addAdditionalService(request , passportReference, investigationReference);
+		assertThat(response, is(notNullValue()));
+		assertThat(response.CaseNumber, is(not(isEmptyOrNullString())));
+		assertThat(response.InvestigationReference, is(not(isEmptyOrNullString())));
+		assertThat(response.IsLinkedInvestigation, is(equalTo(true)));
+		assertThat(response.ParentCaseNumber, is(equalTo(inviteResponseDTO.CaseNumber)));
+		assertThat(response.ParentInvestigationReference, is(equalTo(investigationReference)));
 	}
 }
