@@ -13,7 +13,7 @@ import com.mv.base.exception.ThirdPartyConnectivityFailureException;
 
 public abstract class PayloadActionPerformer<T> extends ActionPerformer {
 	private static final Logger LOG = Logger.getLogger(PayloadActionPerformer.class);
-	T payload;
+	protected T payload;
 
 	public PayloadActionPerformer(Client webClient, T payload, UriBuilder uriBuilder,
 			Object... uriParams) {
@@ -23,7 +23,7 @@ public abstract class PayloadActionPerformer<T> extends ActionPerformer {
 	}
 
 	@Override
-	Response act() throws ThirdPartyConnectivityFailureException {
+	protected Response act() throws ThirdPartyConnectivityFailureException {
 		Entity<T> requestEntity = Entity.entity(payload, MediaType.APPLICATION_JSON_TYPE);
 
 		try {
@@ -35,6 +35,6 @@ public abstract class PayloadActionPerformer<T> extends ActionPerformer {
 
 	}
 
-	abstract Response payloadAct(Entity<T> requestEntity);
-	abstract String getMethodName();
+	protected abstract Response payloadAct(Entity<T> requestEntity);
+	protected abstract String getMethodName();
 }

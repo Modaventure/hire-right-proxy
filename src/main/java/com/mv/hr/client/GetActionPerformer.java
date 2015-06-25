@@ -18,7 +18,7 @@ public class GetActionPerformer extends ActionPerformer {
 	}
 
 	@Override
-	Response act() throws ThirdPartyConnectivityFailureException {
+	protected Response act() throws ThirdPartyConnectivityFailureException {
 		try {
 			return request.get();
 		} catch (ProcessingException e) {

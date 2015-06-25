@@ -18,8 +18,8 @@ import com.mv.base.exception.ThirdPartyConnectivityFailureException;
 public abstract class ActionPerformer {
 	private static final Logger LOG = Logger.getLogger(ActionPerformer.class);
 
-	URI urlPath;
-	Builder request;
+	protected URI urlPath;
+	protected Builder request;
 
 	public ActionPerformer(Client webClient, UriBuilder uriBuilder, Object... uriParams) {
 		this.urlPath = uriBuilder.build(uriParams);
@@ -38,7 +38,7 @@ public abstract class ActionPerformer {
 		return parseResponse(response, resultClass);
 	}
 
-	abstract Response act() throws ThirdPartyConnectivityFailureException;
+	protected abstract Response act() throws ThirdPartyConnectivityFailureException;
 
 	private <T> T parseResponse(Response response, Class<T> resultClass) throws ThirdPartyBadResponseException {
 		try {

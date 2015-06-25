@@ -27,7 +27,6 @@ import com.mv.hr.dto.DocumentDTO;
 import com.mv.hr.dto.DocumentListDTO;
 import com.mv.hr.dto.StatusNotificationDTO;
 
-@Service
 public class HireRightService {
 	String hireRightProfileId, hireRightBaseApiUrl;
 	private UriBuilder builderUrlStartCandidateInvite;

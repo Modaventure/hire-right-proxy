@@ -14,12 +14,12 @@ public class PostActionPerformer<T> extends PayloadActionPerformer<T> {
 	}
 
 	@Override
-	Response payloadAct(Entity<T> requestEntity) {
+	protected Response payloadAct(Entity<T> requestEntity) {
 		return request.post(requestEntity);
 	}
 
 	@Override
-	String getMethodName() {
+	protected String getMethodName() {
 		return METHOD_NAME;
 	}
 }
