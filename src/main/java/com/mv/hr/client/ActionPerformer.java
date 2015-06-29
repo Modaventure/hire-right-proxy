@@ -46,6 +46,12 @@ public abstract class ActionPerformer {
 			return response.readEntity(resultClass);
 		} catch (ProcessingException e) {
 			String message = e.getMessage();
+
+			Throwable cause = e.getCause();
+			if (cause != null) {
+				message += "; " + cause.getMessage();
+			}
+
 			LOG.error("Failed parsing the response from " + urlPath + ", message: " + message);
 			throw new ThirdPartyBadResponseException(message, response, e);
 		}
