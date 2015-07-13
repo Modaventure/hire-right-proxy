@@ -7,5 +7,5 @@ public class AdditionalServiceRequestDTO implements Serializable {
 
 	public String ScreeningServiceName;
 	public boolean HasExtendedData;
-	public Object ExtendedRequestData;
+	public AddOnExtendedRequestData ExtendedRequestData;
 }

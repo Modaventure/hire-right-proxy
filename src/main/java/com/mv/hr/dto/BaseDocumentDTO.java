@@ -15,5 +15,5 @@ public class BaseDocumentDTO implements Serializable {
 	public String Name;
 	public String MimeType;
 	public String FileType;
-	public int FileSize;
+	public long FileSize;
 }
