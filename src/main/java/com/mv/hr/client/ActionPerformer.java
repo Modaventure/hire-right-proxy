@@ -52,7 +52,16 @@ public abstract class ActionPerformer {
 				message += "; " + cause.getMessage();
 			}
 
+			String headers = response.getHeaders().toString();
+			String body = response.readEntity(String.class);
+			int status = response.getStatus();
+
 			LOG.error("Failed parsing the response from " + urlPath + ", message: " + message);
+			LOG.debug(urlPath);
+			LOG.debug(status);
+			LOG.debug(headers);
+			LOG.debug(body);
+
 			throw new ThirdPartyBadResponseException(message, response, e);
 		}
 	}
