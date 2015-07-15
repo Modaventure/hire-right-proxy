@@ -15,7 +15,6 @@ import com.mv.base.exception.ThirdPartyBadResponseException;
 import com.mv.base.exception.ThirdPartyConnectivityFailureException;
 import com.mv.hr.client.GetActionPerformer;
 import com.mv.hr.client.PostActionPerformer;
-import com.mv.hr.client.PutActionPerformer;
 import com.mv.hr.config.HireRightConfiguration;
 import com.mv.hr.dto.AdditionalServiceRequestDTO;
 import com.mv.hr.dto.AdditionalServiceResponseDTO;
@@ -111,9 +110,9 @@ public class HireRightService {
 	}
 
 	public AdditionalServiceResponseDTO addAdditionalService(AdditionalServiceRequestDTO request, String passportReference, String investigationReference) throws ThirdPartyConnectivityFailureException, ThirdPartyBadResponseException {
-		PutActionPerformer<AdditionalServiceRequestDTO> putPerformer = new PutActionPerformer<AdditionalServiceRequestDTO>(webClient,
+		PostActionPerformer<AdditionalServiceRequestDTO> performer = new PostActionPerformer<AdditionalServiceRequestDTO>(webClient,
 				request, builderUrlAddAdditionalService, passportReference, investigationReference);
 
-		return putPerformer.getResponse(AdditionalServiceResponseDTO.class);
+		return performer.getResponse(AdditionalServiceResponseDTO.class);
 	}
 }

@@ -36,7 +36,7 @@ public class CandidateInviteFactory {
 		inviteDTO.setId(random);
 		inviteDTO.setPassportReference(randomString);
 
-		inviteDTO.Email = "testy.testisov@test.com";
+		inviteDTO.Email = "test@hiredbyme.com";
 		inviteDTO.Forename = "Testy";
 		inviteDTO.Surname = "Testisov";
 		inviteDTO.PONumber = "1113";
