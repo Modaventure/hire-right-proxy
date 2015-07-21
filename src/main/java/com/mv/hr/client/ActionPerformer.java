@@ -52,18 +52,28 @@ public abstract class ActionPerformer {
 				message += "; " + cause.getMessage();
 			}
 
-			String headers = response.getHeaders().toString();
-			String body = response.readEntity(String.class);
-			int status = response.getStatus();
-
-			LOG.error("Failed parsing the response from " + urlPath + ", message: " + message);
-			LOG.debug(urlPath);
-			LOG.debug(status);
-			LOG.debug(headers);
-			LOG.debug(body);
+			logDebugInfo(response, message);
 
 			throw new ThirdPartyBadResponseException(message, response, e);
 		}
+	}
+
+	private void logDebugInfo(Response response, String message) {
+		String headers = response.getHeaders().toString();
+		int status = response.getStatus();
+
+		String body;
+		try {
+			body = response.readEntity(String.class);
+		} catch (Exception e){
+			body = "Can't read the body";
+		}
+
+		LOG.error("Failed parsing the response from " + urlPath + ", message: " + message);
+		LOG.debug(urlPath);
+		LOG.debug(status);
+		LOG.debug(headers);
+		LOG.debug(body);
 	}
 
 	private void assertResponseValidity(Response response) throws ThirdPartyBadResponseException {
