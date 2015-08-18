@@ -24,7 +24,6 @@ public abstract class ActionPerformer {
 	public ActionPerformer(Client webClient, UriBuilder uriBuilder, Object... uriParams) {
 		this.urlPath = uriBuilder.build(uriParams);
 		this.request = getRequest(webClient);
-
 	}
 
 	private Builder getRequest(Client webClient) {
@@ -34,6 +33,7 @@ public abstract class ActionPerformer {
 
 	public <T> T getResponse(Class<T> resultClass) throws ThirdPartyBadResponseException, ThirdPartyConnectivityFailureException {
 		Response response = this.act();
+		response.bufferEntity();
 		assertResponseValidity(response);
 		return parseResponse(response, resultClass);
 	}
@@ -42,7 +42,6 @@ public abstract class ActionPerformer {
 
 	private <T> T parseResponse(Response response, Class<T> resultClass) throws ThirdPartyBadResponseException {
 		try {
-			response.bufferEntity();
 			return response.readEntity(resultClass);
 		} catch (ProcessingException e) {
 			String message = e.getMessage();
