@@ -33,7 +33,6 @@ public abstract class ActionPerformer {
 
 	public <T> T getResponse(Class<T> resultClass) throws ThirdPartyBadResponseException, ThirdPartyConnectivityFailureException {
 		Response response = this.act();
-		response.bufferEntity();
 		assertResponseValidity(response);
 		return parseResponse(response, resultClass);
 	}
@@ -76,11 +75,22 @@ public abstract class ActionPerformer {
 	}
 
 	private void assertResponseValidity(Response response) throws ThirdPartyBadResponseException {
-		if (response.getStatusInfo().getFamily() != Response.Status.Family.SUCCESSFUL) {
-			String responseString = response.readEntity(String.class);
-			String errorMessage = urlPath + " returned unsuccessful response, status: " + response.getStatus();
+		String errorMessage = null;
 
-			LOG.error(errorMessage + "; response: " + responseString);
+		try {
+			response.bufferEntity();
+		} catch (ProcessingException e) {
+			errorMessage = urlPath + " returned malformed response";
+		}
+
+		if (response.getStatusInfo().getFamily() != Response.Status.Family.SUCCESSFUL) {
+			errorMessage = urlPath + " returned unsuccessful response, status: " + response.getStatus();
+			String responseString = response.readEntity(String.class);
+			errorMessage += "; response: " + responseString;
+		}
+
+		if (errorMessage != null) {
+			LOG.error(errorMessage);
 			throw new ThirdPartyBadResponseException(errorMessage, response);
 		}
 	}
