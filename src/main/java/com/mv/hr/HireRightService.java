@@ -11,6 +11,7 @@ import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.jackson.JacksonFeature;
 
 import com.mv.base.exception.MissingConfigurationException;
+import com.mv.base.exception.ReadOnlyModeViolationException;
 import com.mv.base.exception.ThirdPartyBadResponseException;
 import com.mv.base.exception.ThirdPartyConnectivityFailureException;
 import com.mv.hr.client.GetActionPerformer;
@@ -26,7 +27,8 @@ import com.mv.hr.dto.DocumentListDTO;
 import com.mv.hr.dto.StatusNotificationDTO;
 
 public class HireRightService {
-	String hireRightProfileId, hireRightBaseApiUrl;
+	private HireRightConfiguration configuration;
+	private String hireRightProfileId, hireRightBaseApiUrl;
 	private UriBuilder builderUrlStartCandidateInvite;
 	private UriBuilder builderUrlGetCandidateStatus;
 	private UriBuilder builderUrlGetCandidateReport;
@@ -36,6 +38,8 @@ public class HireRightService {
 	private Client webClient;
 
 	public HireRightService(HireRightConfiguration configuration) {
+		this.configuration = configuration;
+
 		hireRightProfileId = configuration.getHireRightApiProfile();
 		hireRightBaseApiUrl = configuration.getHireRightApiUrl();
 
@@ -75,6 +79,8 @@ public class HireRightService {
 	}
 
 	public CandidateInviteResponseDTO startCandidateInvite(CandidateInviteDTO candidateInvite, String passportReference) throws ThirdPartyConnectivityFailureException, ThirdPartyBadResponseException {
+		assertWriteMode();
+
 		PostActionPerformer<CandidateInviteDTO> postPerformer = new PostActionPerformer<CandidateInviteDTO>(webClient,
 				candidateInvite, builderUrlStartCandidateInvite, passportReference);
 
@@ -110,9 +116,17 @@ public class HireRightService {
 	}
 
 	public AdditionalServiceResponseDTO addAdditionalService(AdditionalServiceRequestDTO request, String passportReference, String investigationReference) throws ThirdPartyConnectivityFailureException, ThirdPartyBadResponseException {
+		assertWriteMode();
+
 		PostActionPerformer<AdditionalServiceRequestDTO> performer = new PostActionPerformer<AdditionalServiceRequestDTO>(webClient,
 				request, builderUrlAddAdditionalService, passportReference, investigationReference);
 
 		return performer.getResponse(AdditionalServiceResponseDTO.class);
+	}
+
+	private void assertWriteMode() {
+		if (configuration.isInReadOnlyMode()) {
+			throw new ReadOnlyModeViolationException();
+		}
 	}
 }

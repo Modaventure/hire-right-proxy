@@ -51,4 +51,9 @@ public class HireRightTestConfiguration implements HireRightConfiguration {
 		String timeout = properties.getProperty("timeout");
 		return StringUtils.isEmpty(timeout) ? 0 : Integer.parseInt(timeout);
 	}
+
+	@Override
+	public boolean isInReadOnlyMode() {
+		return "true".equals(properties.getProperty("readonly"));
+	}
 }

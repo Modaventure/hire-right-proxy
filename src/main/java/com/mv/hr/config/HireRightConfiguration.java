@@ -6,4 +6,5 @@ public interface HireRightConfiguration {
 	String getHireRightApiUsername();
 	String getHireRightApiPassword();
 	int getHireRightApiReadTimeout();
+	boolean isInReadOnlyMode();
 }
