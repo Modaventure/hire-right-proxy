@@ -16,7 +16,7 @@ import com.mv.base.exception.ThirdPartyBadResponseException;
 import com.mv.base.exception.ThirdPartyConnectivityFailureException;
 import com.mv.hr.client.GetActionPerformer;
 import com.mv.hr.client.PostActionPerformer;
-import com.mv.hr.config.HireRightConfiguration;
+import com.mv.hr.config.HireRightApiConfiguration;
 import com.mv.hr.dto.AdditionalServiceRequestDTO;
 import com.mv.hr.dto.AdditionalServiceResponseDTO;
 import com.mv.hr.dto.CandidateInviteDTO;
@@ -27,7 +27,7 @@ import com.mv.hr.dto.DocumentListDTO;
 import com.mv.hr.dto.StatusNotificationDTO;
 
 public class HireRightService {
-	private HireRightConfiguration configuration;
+	private HireRightApiConfiguration configuration;
 	private String hireRightProfileId, hireRightBaseApiUrl;
 	private UriBuilder builderUrlStartCandidateInvite;
 	private UriBuilder builderUrlGetCandidateStatus;
@@ -37,14 +37,14 @@ public class HireRightService {
 	private UriBuilder builderUrlAddAdditionalService;
 	private Client webClient;
 
-	public HireRightService(HireRightConfiguration configuration) {
+	public HireRightService(HireRightApiConfiguration configuration) {
 		this.configuration = configuration;
 
-		hireRightProfileId = configuration.getHireRightApiProfile();
-		hireRightBaseApiUrl = configuration.getHireRightApiUrl();
+		hireRightProfileId = configuration.getProfile();
+		hireRightBaseApiUrl = configuration.getUrl();
 
-		String hireRightUsername = configuration.getHireRightApiUsername();
-		String hireRightPassword = configuration.getHireRightApiPassword();
+		String hireRightUsername = configuration.getUsername();
+		String hireRightPassword = configuration.getPassword();
 
 		if (StringUtils.isEmpty(hireRightBaseApiUrl) || StringUtils.isEmpty(hireRightProfileId) ||
 				StringUtils.isEmpty(hireRightUsername) || StringUtils.isEmpty(hireRightPassword)) {
@@ -57,7 +57,7 @@ public class HireRightService {
 
 
 		ClientConfig clientConfig = new ClientConfig();
-		int readTimeout = configuration.getHireRightApiReadTimeout();
+		int readTimeout = configuration.getReadTimeout();
 		if (readTimeout > 0) {
 			clientConfig = clientConfig.property(ClientProperties.READ_TIMEOUT, readTimeout);
 		}

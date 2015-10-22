@@ -7,9 +7,9 @@ import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.mv.hr.config.HireRightConfiguration;
+import com.mv.hr.config.HireRightApiConfiguration;
 
-public class HireRightTestConfiguration implements HireRightConfiguration {
+public class HireRightTestConfiguration implements HireRightApiConfiguration {
 	private Properties properties;
 
 	public HireRightTestConfiguration() throws IOException {
@@ -27,27 +27,27 @@ public class HireRightTestConfiguration implements HireRightConfiguration {
 	}
 
 	@Override
-	public String getHireRightApiUrl() {
+	public String getUrl() {
 		return properties.getProperty("endpoint.url");
 	}
 
 	@Override
-	public String getHireRightApiProfile() {
+	public String getProfile() {
 		return properties.getProperty("profile");
 	}
 
 	@Override
-	public String getHireRightApiUsername() {
+	public String getUsername() {
 		return properties.getProperty("username");
 	}
 
 	@Override
-	public String getHireRightApiPassword() {
+	public String getPassword() {
 		return properties.getProperty("password");
 	}
 
 	@Override
-	public int getHireRightApiReadTimeout() {
+	public int getReadTimeout() {
 		String timeout = properties.getProperty("timeout");
 		return StringUtils.isEmpty(timeout) ? 0 : Integer.parseInt(timeout);
 	}
