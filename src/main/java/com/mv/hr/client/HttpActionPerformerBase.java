@@ -15,22 +15,31 @@ import org.apache.log4j.Logger;
 import com.mv.base.exception.ThirdPartyBadResponseException;
 import com.mv.base.exception.ThirdPartyConnectivityFailureException;
 
-public abstract class ActionPerformer {
-	private static final Logger LOG = Logger.getLogger(ActionPerformer.class);
+public abstract class HttpActionPerformerBase implements HttpActionPerformer {
+	private static final Logger LOG = Logger.getLogger(HttpActionPerformerBase.class);
 
 	protected URI urlPath;
 	protected Builder request;
 
-	public ActionPerformer(Client webClient, UriBuilder uriBuilder, Object... uriParams) {
-		this.urlPath = uriBuilder.build(uriParams);
+	public HttpActionPerformerBase(Client webClient) {
 		this.request = getRequest(webClient);
 	}
 
-	private Builder getRequest(Client webClient) {
+	protected Builder getRequest(Client webClient) {
 		WebTarget webResource = webClient.target(urlPath);
 		return webResource.request(MediaType.APPLICATION_JSON_TYPE);
 	}
 
+	public URI getUrlPath() {
+		return urlPath;
+	}
+
+	public HttpActionPerformerBase setUrlPath(UriBuilder uriBuilder, Object... uriParams) {
+		this.urlPath = uriBuilder.build(uriParams);
+		return this;
+	}
+
+	@Override
 	public <T> T getResponse(Class<T> resultClass) throws ThirdPartyBadResponseException, ThirdPartyConnectivityFailureException {
 		Response response = this.act();
 		assertResponseValidity(response);
@@ -39,7 +48,7 @@ public abstract class ActionPerformer {
 
 	protected abstract Response act() throws ThirdPartyConnectivityFailureException;
 
-	private <T> T parseResponse(Response response, Class<T> resultClass) throws ThirdPartyBadResponseException {
+	protected <T> T parseResponse(Response response, Class<T> resultClass) throws ThirdPartyBadResponseException {
 		try {
 			return response.readEntity(resultClass);
 		} catch (ProcessingException e) {
@@ -56,7 +65,7 @@ public abstract class ActionPerformer {
 		}
 	}
 
-	private void logDebugInfo(Response response, String message) {
+	protected void logDebugInfo(Response response, String message) {
 		String headers = response.getHeaders().toString();
 		int status = response.getStatus();
 
@@ -74,7 +83,7 @@ public abstract class ActionPerformer {
 		LOG.debug(body);
 	}
 
-	private void assertResponseValidity(Response response) throws ThirdPartyBadResponseException {
+	protected void assertResponseValidity(Response response) throws ThirdPartyBadResponseException {
 		String errorMessage = null;
 
 		try {

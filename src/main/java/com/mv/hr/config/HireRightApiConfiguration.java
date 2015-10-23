@@ -7,4 +7,5 @@ public interface HireRightApiConfiguration {
 	String getPassword();
 	int getReadTimeout();
 	boolean isInReadOnlyMode();
+	int getMaxSimultaneousGetCalls();
 }

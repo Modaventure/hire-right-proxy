@@ -5,21 +5,22 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 
 import org.apache.log4j.Logger;
 
 import com.mv.base.exception.ThirdPartyConnectivityFailureException;
 
-public abstract class PayloadActionPerformer<T> extends ActionPerformer {
+public abstract class PayloadActionPerformer<T> extends HttpActionPerformerBase {
 	private static final Logger LOG = Logger.getLogger(PayloadActionPerformer.class);
 	protected T payload;
 
-	public PayloadActionPerformer(Client webClient, T payload, UriBuilder uriBuilder,
-			Object... uriParams) {
-		super(webClient, uriBuilder, uriParams);
+	public PayloadActionPerformer(Client webClient) {
+		super(webClient);
+	}
 
+	public PayloadActionPerformer<T> setPayload(T payload) {
 		this.payload = payload;
+		return this;
 	}
 
 	@Override

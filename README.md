@@ -21,6 +21,7 @@ profile=profile_name
 username=some_username
 password=some_username_password
 readony=false
+maxSimultaneousGetCalls=0
 ```
 To run the tests using this configuration file use
 ```

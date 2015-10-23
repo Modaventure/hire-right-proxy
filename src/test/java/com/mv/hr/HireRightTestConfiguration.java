@@ -56,4 +56,10 @@ public class HireRightTestConfiguration implements HireRightApiConfiguration {
 	public boolean isInReadOnlyMode() {
 		return "true".equals(properties.getProperty("readonly"));
 	}
+
+	@Override
+	public int getMaxSimultaneousGetCalls() {
+		String maxSimultaneousGetCalls = properties.getProperty("maxSimultaneousGetCalls");
+		return StringUtils.isEmpty(maxSimultaneousGetCalls) ? 0 : Integer.parseInt(maxSimultaneousGetCalls);
+	}
 }

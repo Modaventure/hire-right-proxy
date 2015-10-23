@@ -14,7 +14,9 @@ import com.mv.base.exception.MissingConfigurationException;
 import com.mv.base.exception.ReadOnlyModeViolationException;
 import com.mv.base.exception.ThirdPartyBadResponseException;
 import com.mv.base.exception.ThirdPartyConnectivityFailureException;
+import com.mv.hr.client.ActionPool;
 import com.mv.hr.client.GetActionPerformer;
+import com.mv.hr.client.HttpActionPerformer;
 import com.mv.hr.client.PostActionPerformer;
 import com.mv.hr.config.HireRightApiConfiguration;
 import com.mv.hr.dto.AdditionalServiceRequestDTO;
@@ -36,9 +38,12 @@ public class HireRightService {
 	private UriBuilder builderUrlGetDocument;
 	private UriBuilder builderUrlAddAdditionalService;
 	private Client webClient;
+	private ActionPool getRequestsActionPool;
 
 	public HireRightService(HireRightApiConfiguration configuration) {
 		this.configuration = configuration;
+
+		getRequestsActionPool = new ActionPool(configuration.getMaxSimultaneousGetCalls());
 
 		hireRightProfileId = configuration.getProfile();
 		hireRightBaseApiUrl = configuration.getUrl();
@@ -81,45 +86,47 @@ public class HireRightService {
 	public CandidateInviteResponseDTO startCandidateInvite(CandidateInviteDTO candidateInvite, String passportReference) throws ThirdPartyConnectivityFailureException, ThirdPartyBadResponseException {
 		assertWriteMode();
 
-		PostActionPerformer<CandidateInviteDTO> postPerformer = new PostActionPerformer<CandidateInviteDTO>(webClient,
-				candidateInvite, builderUrlStartCandidateInvite, passportReference);
+		HttpActionPerformer postPerformer = new PostActionPerformer<CandidateInviteDTO>(webClient)
+				.setPayload(candidateInvite)
+				.setUrlPath(builderUrlStartCandidateInvite, passportReference);
 
 		return postPerformer.getResponse(CandidateInviteResponseDTO.class);
 	}
 
 	public StatusNotificationDTO getInvestigationStatus(String passportReference, String investigationReference) throws ThirdPartyConnectivityFailureException, ThirdPartyBadResponseException {
-		GetActionPerformer getPerformer = new GetActionPerformer(webClient,
-				builderUrlGetCandidateStatus, passportReference, investigationReference);
+		HttpActionPerformer getPerformer = new GetActionPerformer(webClient)
+				.setUrlPath(builderUrlGetCandidateStatus, passportReference, investigationReference);
 
-		return getPerformer.getResponse(StatusNotificationDTO.class);
+		return getRequestsActionPool.execute(getPerformer, StatusNotificationDTO.class);
 	}
 
 	public CandidateReportDTO getCandidateReport(String passportReference, String investigationReference) throws ThirdPartyConnectivityFailureException, ThirdPartyBadResponseException {
-		GetActionPerformer getPerformer = new GetActionPerformer(webClient,
-				builderUrlGetCandidateReport, passportReference, investigationReference);
+		HttpActionPerformer getPerformer = new GetActionPerformer(webClient)
+				.setUrlPath(builderUrlGetCandidateReport, passportReference, investigationReference);
 
-		return getPerformer.getResponse(CandidateReportDTO.class);
+		return getRequestsActionPool.execute(getPerformer, CandidateReportDTO.class);
 	}
 
 	public DocumentListDTO getDocumentList(String passportReference, String investigationReference) throws ThirdPartyConnectivityFailureException, ThirdPartyBadResponseException {
-		GetActionPerformer getPerformer = new GetActionPerformer(webClient,
-				builderUrlGetDocumentList, passportReference, investigationReference);
+		HttpActionPerformer getPerformer = new GetActionPerformer(webClient)
+				.setUrlPath(builderUrlGetDocumentList, passportReference, investigationReference);
 
-		return getPerformer.getResponse(DocumentListDTO.class);
+		return getRequestsActionPool.execute(getPerformer, DocumentListDTO.class);
 	}
 
 	public DocumentDTO getDocument(String passportReference, String investigationReference, String documentReference) throws ThirdPartyConnectivityFailureException, ThirdPartyBadResponseException {
-		GetActionPerformer getPerformer = new GetActionPerformer(webClient,
-				builderUrlGetDocument, passportReference, investigationReference, documentReference);
+		HttpActionPerformer getPerformer = new GetActionPerformer(webClient)
+				.setUrlPath(builderUrlGetDocument, passportReference, investigationReference, documentReference);
 
-		return getPerformer.getResponse(DocumentDTO.class);
+		return getRequestsActionPool.execute(getPerformer, DocumentDTO.class);
 	}
 
 	public AdditionalServiceResponseDTO addAdditionalService(AdditionalServiceRequestDTO request, String passportReference, String investigationReference) throws ThirdPartyConnectivityFailureException, ThirdPartyBadResponseException {
 		assertWriteMode();
 
-		PostActionPerformer<AdditionalServiceRequestDTO> performer = new PostActionPerformer<AdditionalServiceRequestDTO>(webClient,
-				request, builderUrlAddAdditionalService, passportReference, investigationReference);
+		HttpActionPerformer performer = new PostActionPerformer<AdditionalServiceRequestDTO>(webClient)
+				.setPayload(request)
+				.setUrlPath(builderUrlAddAdditionalService, passportReference, investigationReference);
 
 		return performer.getResponse(AdditionalServiceResponseDTO.class);
 	}
