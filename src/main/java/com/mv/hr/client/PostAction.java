@@ -4,10 +4,10 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 
-public class PostActionPerformer<T> extends PayloadActionPerformer<T> {
+public class PostAction<T> extends PayloadAction<T> {
 	private static final String METHOD_NAME = "POST";
 
-	public PostActionPerformer(Client webClient) {
+	public PostAction(Client webClient) {
 		super(webClient);
 	}
 

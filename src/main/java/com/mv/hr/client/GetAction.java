@@ -8,10 +8,10 @@ import org.apache.log4j.Logger;
 
 import com.mv.base.exception.ThirdPartyConnectivityFailureException;
 
-public class GetActionPerformer extends HttpActionPerformerBase {
-	private static final Logger LOG = Logger.getLogger(GetActionPerformer.class);
+public class GetAction extends HttpActionBase {
+	private static final Logger LOG = Logger.getLogger(GetAction.class);
 
-	public GetActionPerformer(Client webClient) {
+	public GetAction(Client webClient) {
 		super(webClient);
 	}
 

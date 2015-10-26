@@ -8,4 +8,7 @@ public interface HireRightApiConfiguration {
 	int getReadTimeout();
 	boolean isInReadOnlyMode();
 	int getMaxSimultaneousGetCalls();
+	int getMaxPostCallRetries();
+	int getMaxGetCallRetries();
+	int getMillisecondsBetweenRetries();
 }

@@ -15,13 +15,13 @@ import org.apache.log4j.Logger;
 import com.mv.base.exception.ThirdPartyBadResponseException;
 import com.mv.base.exception.ThirdPartyConnectivityFailureException;
 
-public abstract class HttpActionPerformerBase implements HttpActionPerformer {
-	private static final Logger LOG = Logger.getLogger(HttpActionPerformerBase.class);
+public abstract class HttpActionBase implements HttpAction {
+	private static final Logger LOG = Logger.getLogger(HttpActionBase.class);
 
 	protected URI urlPath;
 	protected Builder request;
 
-	public HttpActionPerformerBase(Client webClient) {
+	public HttpActionBase(Client webClient) {
 		this.request = getRequest(webClient);
 	}
 
@@ -34,7 +34,7 @@ public abstract class HttpActionPerformerBase implements HttpActionPerformer {
 		return urlPath;
 	}
 
-	public HttpActionPerformerBase setUrlPath(UriBuilder uriBuilder, Object... uriParams) {
+	public HttpActionBase setUrlPath(UriBuilder uriBuilder, Object... uriParams) {
 		this.urlPath = uriBuilder.build(uriParams);
 		return this;
 	}

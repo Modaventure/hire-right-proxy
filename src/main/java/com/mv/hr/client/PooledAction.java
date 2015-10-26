@@ -1,20 +1,27 @@
 package com.mv.hr.client;
 
+import java.net.URI;
+
 import com.mv.base.exception.ThirdPartyBadResponseException;
 import com.mv.base.exception.ThirdPartyConnectivityFailureException;
 
-public class PooledActionPerformer implements HttpActionPerformer {
+public class PooledAction implements HttpAction {
 	private ActionPool pool;
-	private HttpActionPerformer actionPerformer;
+	private HttpAction action;
 
-	public PooledActionPerformer(ActionPool pool, HttpActionPerformer actionPerformer) {
+	public PooledAction(ActionPool pool, HttpAction actionPerformer) {
 		this.pool = pool;
-		this.actionPerformer = actionPerformer;
+		this.action = actionPerformer;
 	}
 
 	@Override
 	public <T> T getResponse(Class<T> resultClass)
 			throws ThirdPartyBadResponseException, ThirdPartyConnectivityFailureException {
-		return pool.execute(actionPerformer, resultClass);
+		return pool.execute(action, resultClass);
+	}
+
+	@Override
+	public URI getUrlPath() {
+		return action.getUrlPath();
 	}
 }

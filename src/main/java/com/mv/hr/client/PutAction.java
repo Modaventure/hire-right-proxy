@@ -4,10 +4,10 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 
-public class PutActionPerformer<T> extends PayloadActionPerformer<T> {
+public class PutAction<T> extends PayloadAction<T> {
 	private static final String METHOD_NAME = "PUT";
 
-	public PutActionPerformer(Client webClient) {
+	public PutAction(Client webClient) {
 		super(webClient);
 	}
 

@@ -10,15 +10,15 @@ import org.apache.log4j.Logger;
 
 import com.mv.base.exception.ThirdPartyConnectivityFailureException;
 
-public abstract class PayloadActionPerformer<T> extends HttpActionPerformerBase {
-	private static final Logger LOG = Logger.getLogger(PayloadActionPerformer.class);
+public abstract class PayloadAction<T> extends HttpActionBase {
+	private static final Logger LOG = Logger.getLogger(PayloadAction.class);
 	protected T payload;
 
-	public PayloadActionPerformer(Client webClient) {
+	public PayloadAction(Client webClient) {
 		super(webClient);
 	}
 
-	public PayloadActionPerformer<T> setPayload(T payload) {
+	public PayloadAction<T> setPayload(T payload) {
 		this.payload = payload;
 		return this;
 	}

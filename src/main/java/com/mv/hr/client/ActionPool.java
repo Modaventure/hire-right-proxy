@@ -18,7 +18,7 @@ public class ActionPool {
 		}
 	}
 
-	public <T> T execute(HttpActionPerformer actionPerformer, Class<T> resultClass)
+	public <T> T execute(HttpAction action, Class<T> resultClass)
 			throws ThirdPartyBadResponseException, ThirdPartyConnectivityFailureException {
 
 		if (semaphore != null) {
@@ -32,7 +32,7 @@ public class ActionPool {
 		}
 
 		try {
-			return actionPerformer.getResponse(resultClass);
+			return action.getResponse(resultClass);
 		} finally {
 			if (semaphore != null) {
 				semaphore.release();

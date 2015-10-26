@@ -48,8 +48,7 @@ public class HireRightTestConfiguration implements HireRightApiConfiguration {
 
 	@Override
 	public int getReadTimeout() {
-		String timeout = properties.getProperty("timeout");
-		return StringUtils.isEmpty(timeout) ? 0 : Integer.parseInt(timeout);
+		return readIntProperty("timeout");
 	}
 
 	@Override
@@ -59,7 +58,26 @@ public class HireRightTestConfiguration implements HireRightApiConfiguration {
 
 	@Override
 	public int getMaxSimultaneousGetCalls() {
-		String maxSimultaneousGetCalls = properties.getProperty("maxSimultaneousGetCalls");
-		return StringUtils.isEmpty(maxSimultaneousGetCalls) ? 0 : Integer.parseInt(maxSimultaneousGetCalls);
+		return readIntProperty("pool.get.size");
+	}
+
+	@Override
+	public int getMaxPostCallRetries() {
+		return readIntProperty("retries.post");
+	}
+
+	@Override
+	public int getMaxGetCallRetries() {
+		return readIntProperty("retries.get");
+	}
+
+	@Override
+	public int getMillisecondsBetweenRetries() {
+		return readIntProperty("retries.pause");
+	}
+
+	private int readIntProperty(String propertyName) {
+		String propertyValue = properties.getProperty(propertyName);
+		return StringUtils.isEmpty(propertyValue) ? 0 : Integer.parseInt(propertyValue);
 	}
 }
