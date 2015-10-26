@@ -19,17 +19,13 @@ public abstract class HttpActionBase implements HttpAction {
 	private static final Logger LOG = Logger.getLogger(HttpActionBase.class);
 
 	protected URI urlPath;
-	protected Builder request;
+	protected Client webClient;
 
 	public HttpActionBase(Client webClient) {
-		this.request = getRequest(webClient);
+		this.webClient = webClient;
 	}
 
-	protected Builder getRequest(Client webClient) {
-		WebTarget webResource = webClient.target(urlPath);
-		return webResource.request(MediaType.APPLICATION_JSON_TYPE);
-	}
-
+	@Override
 	public URI getUrlPath() {
 		return urlPath;
 	}
@@ -44,6 +40,11 @@ public abstract class HttpActionBase implements HttpAction {
 		Response response = this.act();
 		assertResponseValidity(response);
 		return parseResponse(response, resultClass);
+	}
+
+	protected Builder getRequest() {
+		WebTarget webResource = webClient.target(urlPath);
+		return webResource.request(MediaType.APPLICATION_JSON_TYPE);
 	}
 
 	protected abstract Response act() throws ThirdPartyConnectivityFailureException;

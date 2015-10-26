@@ -18,7 +18,7 @@ public class GetAction extends HttpActionBase {
 	@Override
 	protected Response act() throws ThirdPartyConnectivityFailureException {
 		try {
-			return request.get();
+			return getRequest().get();
 		} catch (ProcessingException e) {
 			LOG.error("Connection failure when GETting " + urlPath + ", message: " + e.getMessage());
 			throw new ThirdPartyConnectivityFailureException(e);

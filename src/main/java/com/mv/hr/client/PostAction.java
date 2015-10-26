@@ -13,7 +13,7 @@ public class PostAction<T> extends PayloadAction<T> {
 
 	@Override
 	protected Response payloadAct(Entity<T> requestEntity) {
-		return request.post(requestEntity);
+		return getRequest().post(requestEntity);
 	}
 
 	@Override
