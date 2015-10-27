@@ -13,14 +13,16 @@ public class HireRightTestConfiguration implements HireRightApiConfiguration {
 	private Properties properties;
 
 	public HireRightTestConfiguration() throws IOException {
-		String filePath = System.getProperty("envConfigPropertiesFilePath");
+		this(System.getProperty("envConfigPropertiesFilePath"));
+	}
 
+	public HireRightTestConfiguration(String propertiesFilePath) throws IOException {
 		System.out.println("=============================================================");
 		System.out.println("# Loading HireRight configuration from file:");
-		System.out.println("# " + filePath);
+		System.out.println("# " + propertiesFilePath);
 		System.out.println("=============================================================");
 
-		FileInputStream inputStream = new FileInputStream(new File(filePath));
+		FileInputStream inputStream = new FileInputStream(new File(propertiesFilePath));
 		properties = new Properties();
 		properties.load(inputStream);
 		inputStream.close();
@@ -54,26 +56,6 @@ public class HireRightTestConfiguration implements HireRightApiConfiguration {
 	@Override
 	public boolean isInReadOnlyMode() {
 		return "true".equals(properties.getProperty("readonly"));
-	}
-
-	@Override
-	public int getMaxSimultaneousGetCalls() {
-		return readIntProperty("pool.get.size");
-	}
-
-	@Override
-	public int getMaxPostCallRetries() {
-		return readIntProperty("retries.post");
-	}
-
-	@Override
-	public int getMaxGetCallRetries() {
-		return readIntProperty("retries.get");
-	}
-
-	@Override
-	public int getMillisecondsBetweenRetries() {
-		return readIntProperty("retries.pause");
 	}
 
 	private int readIntProperty(String propertyName) {
