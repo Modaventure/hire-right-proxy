@@ -8,11 +8,15 @@ import org.apache.log4j.Logger;
 
 import com.mv.base.exception.ThirdPartyConnectivityFailureException;
 
-public class GetAction extends HttpActionBase {
+public class GetAction<T> extends HttpActionBase<T> {
 	private static final Logger LOG = Logger.getLogger(GetAction.class);
 
-	public GetAction(Client webClient) {
-		super(webClient);
+	public static <T> GetAction<T> createGetAction(Client webClient, Class<T> resultClass) {
+		return new GetAction<>(webClient, resultClass);
+	}
+
+	public GetAction(Client webClient, Class<T> resultClass) {
+		super(webClient, resultClass);
 	}
 
 	@Override

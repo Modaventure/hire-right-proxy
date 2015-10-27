@@ -24,7 +24,7 @@ import com.mv.hr.dto.StatusNotificationDTO;
 public class HireRightProxyTest {
 	private static HireRightTestConfiguration configuration;
 
-	private HireRightProxy proxy;
+	private HireRightRequestFactory requestFactory;
 
 	private CandidateInviteFactory.ExtendedCandidateInviteDTO inviteDTO;
 	private CandidateInviteResponseDTO inviteResponseDTO;
@@ -39,12 +39,12 @@ public class HireRightProxyTest {
 
 	@Before
 	public void setUp() throws Exception {
-		proxy = new HireRightProxy(configuration);
+		requestFactory = new HireRightRequestFactory(configuration);
 
 		inviteDTO = CandidateInviteFactory.randomInvite();
 		passportReference = inviteDTO.getPassportReference();
 
-		inviteResponseDTO = proxy.startCandidateInvite(inviteDTO, passportReference);
+		inviteResponseDTO = requestFactory.startCandidateInvite(inviteDTO, passportReference).execute();
 		investigationReference = inviteResponseDTO.InvestigationReference;
 	}
 
@@ -61,7 +61,7 @@ public class HireRightProxyTest {
 
 	@Test
 	public void testGetNewInvestigationStatus() throws Exception {
-		StatusNotificationDTO statusNotificationDTO = proxy.getInvestigationStatus(passportReference, investigationReference);
+		StatusNotificationDTO statusNotificationDTO = requestFactory.getInvestigationStatus(passportReference, investigationReference).execute();
 
 		assertThat(statusNotificationDTO.ExternalPackageReference, is(inviteDTO.ExternalPackageReference));
 		assertThat(statusNotificationDTO.IsComplete, is(false));
@@ -84,7 +84,7 @@ public class HireRightProxyTest {
 
 	@Test
 	public void testGetCandidateReport() throws Exception {
-		CandidateReportDTO candidateReport = proxy.getCandidateReport(passportReference, investigationReference);
+		CandidateReportDTO candidateReport = requestFactory.getCandidateReport(passportReference, investigationReference).execute();
 
 		assertThat(candidateReport.PassportReference, is(inviteDTO.getPassportReference()));
 		assertThat(candidateReport.ExternalReferenceId, is(inviteDTO.ExternalReferenceId));
@@ -99,7 +99,7 @@ public class HireRightProxyTest {
 
 	@Test
 	public void testGetDocumentList() throws Exception {
-		DocumentListDTO documentList = proxy.getDocumentList(passportReference, investigationReference);
+		DocumentListDTO documentList = requestFactory.getDocumentList(passportReference, investigationReference).execute();
 		assertThat(documentList.Documents, is(empty()));
 	}
 
@@ -109,7 +109,7 @@ public class HireRightProxyTest {
 		request.ScreeningServiceName = "CIFAS";
 		request.HasExtendedData = false;
 
-		AdditionalServiceResponseDTO response = proxy.addAdditionalService(request , passportReference, investigationReference);
+		AdditionalServiceResponseDTO response = requestFactory.addAdditionalService(request , passportReference, investigationReference).execute();
 		assertThat(response, is(notNullValue()));
 		assertThat(response.CaseNumber, is(not(isEmptyOrNullString())));
 		assertThat(response.InvestigationReference, is(not(isEmptyOrNullString())));

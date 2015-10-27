@@ -23,7 +23,7 @@ public class FailuresTest {
 	@Rule
 	public WireMockRule wireMockRule = new WireMockRule(REST_MOCK_PORT);
 
-	private HireRightProxy proxy;
+	private HireRightRequestFactory proxy;
 
 	@BeforeClass
 	public static void createConfiguration() throws Exception {
@@ -32,7 +32,7 @@ public class FailuresTest {
 
 	@Before
 	public void setUp() throws Exception {
-		proxy = new HireRightProxy(configuration);
+		proxy = new HireRightRequestFactory(configuration);
 	}
 
 	@Test(expected = ThirdPartyBadResponseException.class)

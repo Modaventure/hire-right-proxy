@@ -27,7 +27,7 @@ import com.mv.hr.dto.DocumentDTO;
 import com.mv.hr.dto.DocumentListDTO;
 import com.mv.hr.dto.StatusNotificationDTO;
 
-public class HireRightProxy {
+public class HireRightRequestFactory {
 	private HireRightApiConfiguration configuration;
 	private String hireRightProfileId, hireRightBaseApiUrl;
 	private UriBuilder builderUrlStartCandidateInvite;
@@ -38,7 +38,7 @@ public class HireRightProxy {
 	private UriBuilder builderUrlAddAdditionalService;
 	private Client webClient;
 
-	public HireRightProxy(HireRightApiConfiguration configuration) {
+	public HireRightRequestFactory(HireRightApiConfiguration configuration) {
 		this.configuration = configuration;
 
 		hireRightProfileId = configuration.getProfile();
@@ -79,52 +79,54 @@ public class HireRightProxy {
 		return UriBuilder.fromPath(hireRightBaseApiUrl).path(path).resolveTemplate("profileId", hireRightProfileId);
 	}
 
-	public CandidateInviteResponseDTO startCandidateInvite(CandidateInviteDTO candidateInvite, String passportReference) throws ThirdPartyConnectivityFailureException, ThirdPartyBadResponseException {
+	public HttpAction<CandidateInviteResponseDTO> startCandidateInvite(CandidateInviteDTO candidateInvite, String passportReference) throws ThirdPartyConnectivityFailureException, ThirdPartyBadResponseException {
 		assertWriteMode();
 
-		HttpAction postAction = new PostAction<CandidateInviteDTO>(webClient)
+		HttpAction<CandidateInviteResponseDTO> postAction =
+				PostAction.createPostAction(webClient, CandidateInviteResponseDTO.class, CandidateInviteDTO.class)
 				.setPayload(candidateInvite)
 				.setUrlPath(builderUrlStartCandidateInvite, passportReference);
 
-		return postAction.getResponse(CandidateInviteResponseDTO.class);
+		return postAction;
 	}
 
-	public StatusNotificationDTO getInvestigationStatus(String passportReference, String investigationReference) throws ThirdPartyConnectivityFailureException, ThirdPartyBadResponseException {
-		HttpAction getAction = new GetAction(webClient)
+	public HttpAction<StatusNotificationDTO> getInvestigationStatus(String passportReference, String investigationReference) throws ThirdPartyConnectivityFailureException, ThirdPartyBadResponseException {
+		HttpAction<StatusNotificationDTO> getAction = GetAction.createGetAction(webClient, StatusNotificationDTO.class)
 				.setUrlPath(builderUrlGetCandidateStatus, passportReference, investigationReference);
 
-		return getAction.getResponse(StatusNotificationDTO.class);
+		return getAction;
 	}
 
-	public CandidateReportDTO getCandidateReport(String passportReference, String investigationReference) throws ThirdPartyConnectivityFailureException, ThirdPartyBadResponseException {
-		HttpAction getAction = new GetAction(webClient)
+	public HttpAction<CandidateReportDTO> getCandidateReport(String passportReference, String investigationReference) throws ThirdPartyConnectivityFailureException, ThirdPartyBadResponseException {
+		HttpAction<CandidateReportDTO> getAction = GetAction.createGetAction(webClient, CandidateReportDTO.class)
 				.setUrlPath(builderUrlGetCandidateReport, passportReference, investigationReference);
 
-		return getAction.getResponse(CandidateReportDTO.class);
+		return getAction;
 	}
 
-	public DocumentListDTO getDocumentList(String passportReference, String investigationReference) throws ThirdPartyConnectivityFailureException, ThirdPartyBadResponseException {
-		HttpAction getAction = new GetAction(webClient)
+	public HttpAction<DocumentListDTO> getDocumentList(String passportReference, String investigationReference) throws ThirdPartyConnectivityFailureException, ThirdPartyBadResponseException {
+		HttpAction<DocumentListDTO> getAction = GetAction.createGetAction(webClient, DocumentListDTO.class)
 				.setUrlPath(builderUrlGetDocumentList, passportReference, investigationReference);
 
-		return getAction.getResponse(DocumentListDTO.class);
+		return getAction;
 	}
 
-	public DocumentDTO getDocument(String passportReference, String investigationReference, String documentReference) throws ThirdPartyConnectivityFailureException, ThirdPartyBadResponseException {
-		HttpAction getAction = new GetAction(webClient)
+	public HttpAction<DocumentDTO> getDocument(String passportReference, String investigationReference, String documentReference) throws ThirdPartyConnectivityFailureException, ThirdPartyBadResponseException {
+		HttpAction<DocumentDTO> getAction = GetAction.createGetAction(webClient, DocumentDTO.class)
 				.setUrlPath(builderUrlGetDocument, passportReference, investigationReference, documentReference);
 
-		return getAction.getResponse(DocumentDTO.class);
+		return getAction;
 	}
 
-	public AdditionalServiceResponseDTO addAdditionalService(AdditionalServiceRequestDTO request, String passportReference, String investigationReference) throws ThirdPartyConnectivityFailureException, ThirdPartyBadResponseException {
+	public HttpAction<AdditionalServiceResponseDTO> addAdditionalService(AdditionalServiceRequestDTO request, String passportReference, String investigationReference) throws ThirdPartyConnectivityFailureException, ThirdPartyBadResponseException {
 		assertWriteMode();
 
-		HttpAction postAction = new PostAction<AdditionalServiceRequestDTO>(webClient)
+		HttpAction<AdditionalServiceResponseDTO> postAction =
+				PostAction.createPostAction(webClient, AdditionalServiceResponseDTO.class, AdditionalServiceRequestDTO.class)
 				.setPayload(request)
 				.setUrlPath(builderUrlAddAdditionalService, passportReference, investigationReference);
 
-		return postAction.getResponse(AdditionalServiceResponseDTO.class);
+		return postAction;
 	}
 
 	private void assertWriteMode() {

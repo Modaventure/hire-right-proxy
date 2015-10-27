@@ -15,14 +15,16 @@ import org.apache.log4j.Logger;
 import com.mv.base.exception.ThirdPartyBadResponseException;
 import com.mv.base.exception.ThirdPartyConnectivityFailureException;
 
-public abstract class HttpActionBase implements HttpAction {
+public abstract class HttpActionBase<T> implements HttpAction<T> {
 	private static final Logger LOG = Logger.getLogger(HttpActionBase.class);
 
 	protected URI urlPath;
 	protected Client webClient;
+	protected Class<T> resultClass;
 
-	public HttpActionBase(Client webClient) {
+	public HttpActionBase(Client webClient, Class<T> resultClass) {
 		this.webClient = webClient;
+		this.resultClass = resultClass;
 	}
 
 	@Override
@@ -30,16 +32,16 @@ public abstract class HttpActionBase implements HttpAction {
 		return urlPath;
 	}
 
-	public HttpActionBase setUrlPath(UriBuilder uriBuilder, Object... uriParams) {
+	public HttpActionBase<T> setUrlPath(UriBuilder uriBuilder, Object... uriParams) {
 		this.urlPath = uriBuilder.build(uriParams);
 		return this;
 	}
 
 	@Override
-	public <T> T getResponse(Class<T> resultClass) throws ThirdPartyBadResponseException, ThirdPartyConnectivityFailureException {
+	public T execute() throws ThirdPartyBadResponseException, ThirdPartyConnectivityFailureException {
 		Response response = this.act();
 		assertResponseValidity(response);
-		return parseResponse(response, resultClass);
+		return parseResponse(response);
 	}
 
 	protected Builder getRequest() {
@@ -49,7 +51,7 @@ public abstract class HttpActionBase implements HttpAction {
 
 	protected abstract Response act() throws ThirdPartyConnectivityFailureException;
 
-	protected <T> T parseResponse(Response response, Class<T> resultClass) throws ThirdPartyBadResponseException {
+	protected T parseResponse(Response response) throws ThirdPartyBadResponseException {
 		try {
 			return response.readEntity(resultClass);
 		} catch (ProcessingException e) {

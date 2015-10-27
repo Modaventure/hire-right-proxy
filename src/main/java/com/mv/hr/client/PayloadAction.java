@@ -10,22 +10,22 @@ import org.apache.log4j.Logger;
 
 import com.mv.base.exception.ThirdPartyConnectivityFailureException;
 
-public abstract class PayloadAction<T> extends HttpActionBase {
+public abstract class PayloadAction<T, S> extends HttpActionBase<T> {
 	private static final Logger LOG = Logger.getLogger(PayloadAction.class);
-	protected T payload;
+	protected S payload;
 
-	public PayloadAction(Client webClient) {
-		super(webClient);
+	public PayloadAction(Client webClient, Class<T> resultClass) {
+		super(webClient, resultClass);
 	}
 
-	public PayloadAction<T> setPayload(T payload) {
+	public PayloadAction<T, S> setPayload(S payload) {
 		this.payload = payload;
 		return this;
 	}
 
 	@Override
 	protected Response act() throws ThirdPartyConnectivityFailureException {
-		Entity<T> requestEntity = Entity.entity(payload, MediaType.APPLICATION_JSON_TYPE);
+		Entity<S> requestEntity = Entity.entity(payload, MediaType.APPLICATION_JSON_TYPE);
 
 		try {
 			return payloadAct(requestEntity);
@@ -36,6 +36,6 @@ public abstract class PayloadAction<T> extends HttpActionBase {
 
 	}
 
-	protected abstract Response payloadAct(Entity<T> requestEntity);
+	protected abstract Response payloadAct(Entity<S> requestEntity);
 	protected abstract String getMethodName();
 }
